@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.1](https://github.com/HomeOps/ir-adapter/compare/v0.1.0...v0.1.1) (2026-06-17)
+
+
+### Features
+
+* Signal carries its canonical control (depend on homeops-ir-canonical) ([896e815](https://github.com/HomeOps/ir-adapter/commit/896e8153bb2216308b78217b033fd99a03b13e07))
+
 ## 0.1.0 (2026-06-17)
 
 
