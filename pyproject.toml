@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "homeops-ir-adapter"
-version = "0.0.0"                      # managed by release-please
+version = "0.1.0"                      # managed by release-please
 description = "IR sources (Flipper .ir, HA code sets) → a common Signal for ESPHome and HA's IR proxy."
 readme = "README.md"
 requires-python = ">=3.14"            # infrared-protocols requires 3.14
