@@ -1,0 +1,48 @@
+name: release + publish
+
+# release-please AND PyPI publish in ONE workflow run. A GitHub Release created by
+# release-please via GITHUB_TOKEN does NOT trigger a separate `on: release` workflow
+# (GitHub's recursion guard), so the publish job runs here in the same invocation
+# once a release is cut. Named `publish.yaml` so the PyPI trusted publisher
+# (workflow `publish.yaml`, environment `pypi`) matches.
+#
+# Manual backfill: `gh workflow run publish.yaml --ref vX.Y.Z`.
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  release-please:
+    if: github.event_name == 'push'
+    runs-on: ubuntu-latest
+    outputs:
+      release_created: ${{ steps.rp.outputs.release_created }}
+    steps:
+      - id: rp
+        uses: googleapis/release-please-action@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+  pypi:
+    needs: [release-please]
+    if: ${{ always() && (needs.release-please.outputs.release_created == 'true' || github.event_name == 'workflow_dispatch') }}
+    runs-on: ubuntu-latest
+    environment: pypi
+    permissions:
+      id-token: write        # OIDC for PyPI trusted publishing
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.14"
+      - run: pip install build hatchling
+      - name: Build sdist + wheel
+        run: python -m build --no-isolation
+      - name: Publish to PyPI
+        uses: pypa/gh-action-pypi-publish@release/v1

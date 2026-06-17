@@ -1,0 +1,31 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "homeops-ir-adapter"
+version = "0.0.0"                      # managed by release-please
+description = "IR sources (Flipper .ir, HA code sets) → a common Signal for ESPHome and HA's IR proxy."
+readme = "README.md"
+requires-python = ">=3.14"            # infrared-protocols requires 3.14
+license = "MIT"
+authors = [{ name = "HomeOps" }]
+keywords = ["infrared", "ir", "flipper", "flipper-irdb", "home-assistant", "esphome", "remote"]
+classifiers = [
+  "Programming Language :: Python :: 3",
+  "License :: OSI Approved :: MIT License",
+  "Topic :: Home Automation",
+]
+dependencies = [
+  "infrared-protocols>=6.0.1,<7",
+]
+
+[project.urls]
+Homepage = "https://github.com/HomeOps/ir-adapter"
+Issues = "https://github.com/HomeOps/ir-adapter/issues"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/ir_adapter"]
+
+[tool.ruff]
+line-length = 100

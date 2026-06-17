@@ -1,0 +1,26 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  build-test:
+    name: Lint, build, test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.14"        # required by infrared-protocols
+      - run: pip install ruff build hatchling pytest
+      - name: Lint
+        run: ruff check .
+      - name: Build wheel
+        run: python -m build --wheel --no-isolation
+      - name: Install + test
+        run: |
+          pip install dist/*.whl
+          pytest -q
