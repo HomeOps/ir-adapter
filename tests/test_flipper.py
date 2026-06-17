@@ -27,6 +27,14 @@ def test_raw_signal_has_signed_timings_and_no_protocol():
     assert sig.timings == (100, -200, 300, -400)
     assert sig.protocol is None and sig.is_parsed is False
     assert sig.repeat == 1
+    assert sig.canonical == "power_toggle"      # name "Power" -> canonical control
+
+
+def test_unmapped_name_has_no_canonical():
+    text = ("Filetype: IR signals file\nVersion: 1\n#\n"
+            "name: Whatchamacallit\ntype: raw\nfrequency: 38000\ndata: 1 2\n")
+    (sig,) = flipper.from_text(text)
+    assert sig.canonical is None
 
 
 def test_le_decode():
@@ -47,3 +55,4 @@ def test_parsed_nec_signal_carries_protocol_and_timings():
     assert sig.carrier_hz == 38000
     assert sig.timings[:2] == (9000, -4500)     # NEC leader from the library
     assert sig.repeat == 3
+    assert sig.canonical == "power_on"          # name "On" -> canonical control

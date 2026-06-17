@@ -6,6 +6,7 @@ their protocol/address/command so a consumer can also transmit them natively.
 """
 
 from . import encode
+from ._naming import control_of
 from .signal import Signal
 
 
@@ -44,7 +45,8 @@ def _signal(entry):
         carrier = int(entry.get("frequency", "38000"))
         nums = [int(x) for x in entry["data"].split()]
         timings = tuple(n if i % 2 == 0 else -n for i, n in enumerate(nums))
-        return Signal(name=name, carrier_hz=carrier, timings=timings, repeat=1)
+        return Signal(name=name, carrier_hz=carrier, timings=timings, repeat=1,
+                      canonical=control_of(name))
 
     protocol = entry.get("protocol", "")
     address = _le(entry["address"])
@@ -56,6 +58,7 @@ def _signal(entry):
     return Signal(
         name=name, carrier_hz=carrier, timings=timings, protocol=protocol,
         address=address & 0xFFFF, command=command & 0xFF, repeat=encode.PARSED_REPEAT,
+        canonical=control_of(name),
     )
 
 

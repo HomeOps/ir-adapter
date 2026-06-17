@@ -18,6 +18,7 @@ classifiers = [
 ]
 dependencies = [
   "infrared-protocols>=6.0.1,<7",
+  "homeops-ir-canonical>=0.1.0",
 ]
 
 [project.urls]

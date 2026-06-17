@@ -6,6 +6,7 @@ same library the IR proxy uses — so they're protocol-correct by construction.)
 """
 
 from . import encode
+from ._naming import control_of
 from .signal import Signal
 
 
@@ -54,7 +55,8 @@ def codesets():
                         seen.add(member.name)
                         carrier, timings = encode.raw_timings(command)
                         signals.append(Signal(name=member.name, carrier_hz=carrier,
-                                              timings=timings, repeat=encode.PARSED_REPEAT))
+                                              timings=timings, repeat=encode.PARSED_REPEAT,
+                                              canonical=control_of(member.name)))
                 if signals:
                     yield relmod.replace(".", "/"), signals
 

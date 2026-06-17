@@ -19,12 +19,17 @@ signals = ha.from_codeset("vizio/tv")                    # an infrared-protocols
 
 s = signals[0]
 s.name           # "Power"
+s.canonical      # "power_toggle"  (resolved via homeops-ir-canonical; None if unmapped)
 s.carrier_hz     # 38000
 s.timings        # (9000, -4500, 560, -560, ...)  signed: + mark, - space
 s.protocol       # "NEC" (None for raw captures)
 s.address, s.command
 s.repeat         # transmit-layer repeats (parsed frames need ~3)
 ```
+
+Every `Signal` is **self-describing**: it carries its canonical control id, so a
+consumer (esp-codegen, concerto) depends only on `homeops-ir-adapter` and gets the
+control name for free — no separate name-resolution step.
 
 A `Signal` carries both forms so either consumer uses what it needs:
 

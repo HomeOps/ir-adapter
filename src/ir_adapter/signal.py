@@ -8,6 +8,8 @@ One `Signal` drives both transmit paths:
     component             falling back to raw `timings` for un-parsed captures.
 
 `timings` is ESPHome's signed convention: + = carrier on (mark), - = off (space).
+`canonical` is the control this button maps to (homeops-ir-canonical), resolved at
+parse time so the Signal is self-describing — `None` when the name has no mapping.
 """
 
 from dataclasses import dataclass, field
@@ -22,6 +24,7 @@ class Signal:
     address: int | None = None
     command: int | None = None
     repeat: int = 1                 # transmit-layer repeats (library frames need ~3)
+    canonical: str | None = None    # canonical control id (e.g. volume_up); None if unmapped
 
     @property
     def is_parsed(self) -> bool:
