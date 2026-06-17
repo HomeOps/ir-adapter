@@ -50,8 +50,8 @@ def command_for(protocol, address, command):
 def raw_timings(command):
     """(carrier_hz, signed timings) for a library Command.
 
-    The library returns all-positive mark/space pairs starting on a mark; convert to
-    ESPHome's signed convention: + = mark, - = space.
+    The library already returns ESPHome's signed convention (+ = mark, - = space),
+    so we pass it through unchanged. (Flipper `type: raw` data, by contrast, is
+    all-positive and is sign-alternated by the flipper adapter.)
     """
-    nums = command.get_raw_timings()
-    return command.modulation, tuple(n if i % 2 == 0 else -n for i, n in enumerate(nums))
+    return command.modulation, tuple(command.get_raw_timings())
